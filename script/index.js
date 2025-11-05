@@ -16,6 +16,15 @@ function loadVideos() {
         .then(data => displayVideos(data.videos));
 }
 
+const loadCategoryVideos = (id) => {
+    const url = `https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
+    console.log(url);
+
+    fetch(url)
+        .then(res => res.json())
+        .then(data => displayVideos(data.category));
+}
+
 function displayCategories(categories) {
     // Get the container
     const categoryContainer = document.getElementById("category-container");
@@ -25,7 +34,7 @@ function displayCategories(categories) {
         // Create Element
         const categoryDiv = document.createElement("div");
         categoryDiv.innerHTML = `
-            <button class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
+            <button onclick="loadCategoryVideos(${cat.category_id})" class="btn btn-md hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
         `;
         // Append Element
         categoryContainer.append(categoryDiv);
@@ -36,24 +45,32 @@ function displayCategories(categories) {
 const displayVideos = (videos) => {
     const videoContainer = document.getElementById("video-container");
 
+    videoContainer.innerHTML = "";
+
     videos.forEach(video => {
         console.log(video);
         const videoCard = document.createElement("div");
         videoCard.innerHTML = `
-            <div class="card bg-base-100 shadow-sm">
-            <figure>
-                <img
-                src="${video.thumbnail}"
-                alt="Shoes" />
+            <div class="card bg-base-100">
+            <figure class="relative">
+                <img class="w-full h-[200px] object-cover rounded-sm" src="${video.thumbnail}" alt="Shoes" />
+                <span class="absolute bottom-2 right-2 text-white bg-black px-2 text-sm rounded">3hrs 56 min ago</span>
             </figure>
-            <div class="card-body">
-                <h2 class="card-title">${video.title}</h2>
-                <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
-                <div class="card-actions justify-end">
-                <button class="btn btn-primary">Buy Now</button>
+            <div class="flex gap-3 px-0 py-5">
+                <div class="profile">
+                    <div class="avatar">
+                        <div class="ring-primary ring-offset-base-100 w-6 rounded-full ring-2 ring-offset-2">
+                            <img src="${video.authors[0].profile_picture}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="intro">
+                    <h2 class="font-semibold">${video.title}</h2>
+                    <p class="mt-2 text-sm text-gray-400 flex gap-1">${video.authors[0].profile_name} <img class="h-5 w-5" src="https://img.icons8.com/?size=96&id=98A4yZTt9abw&format=png" alt=""></p>
+                    <p class="text-sm text-gray-400">${video.others.views} Views</p>
                 </div>
             </div>
-            </div>
+        </div>
         `
         // Append
         videoContainer.append(videoCard);
@@ -61,4 +78,3 @@ const displayVideos = (videos) => {
 }
 
 loadCategories();
-loadVideos()
