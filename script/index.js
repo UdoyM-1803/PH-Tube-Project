@@ -1,5 +1,13 @@
 console.log("Index is connected.");
 
+function removeActiveClass() {
+    const activeButtons = document.getElementsByClassName("active");
+
+    for (let btn of activeButtons) {
+        btn.classList.remove("active");
+    }
+}
+
 function loadCategories() {
     // 1. We will fetch the Data
     fetch("https://openapi.programming-hero.com/api/phero-tube/categories")
@@ -13,7 +21,11 @@ function loadCategories() {
 function loadVideos() {
     fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
         .then(response => response.json())
-        .then(data => displayVideos(data.videos));
+        .then(data => {
+            removeActiveClass();
+            document.getElementById("btn-all").classList.add("active");
+            displayVideos(data.videos)
+        });
 }
 
 const loadCategoryVideos = (id) => {
@@ -22,7 +34,13 @@ const loadCategoryVideos = (id) => {
 
     fetch(url)
         .then(res => res.json())
-        .then(data => displayVideos(data.category));
+        .then(data => {
+            removeActiveClass();
+            // NO active class.....................
+            const clickedButton = document.getElementById(`btn-${id}`);
+            clickedButton.classList.add("active");
+            displayVideos(data.category)
+        });
 }
 
 function displayCategories(categories) {
@@ -34,7 +52,7 @@ function displayCategories(categories) {
         // Create Element
         const categoryDiv = document.createElement("div");
         categoryDiv.innerHTML = `
-            <button onclick="loadCategoryVideos(${cat.category_id})" class="btn btn-md hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
+            <button id= "btn-${cat.category_id}" onclick="loadCategoryVideos(${cat.category_id})" class="btn btn-md hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
         `;
         // Append Element
         categoryContainer.append(categoryDiv);
@@ -46,6 +64,16 @@ const displayVideos = (videos) => {
     const videoContainer = document.getElementById("video-container");
 
     videoContainer.innerHTML = "";
+
+    if (videos.length == 0) {
+        videoContainer.innerHTML = `
+            <div class="py-20 col-span-full text-center flex flex-col justify-center items-center">
+                <img class="w-[120px]" src="Resources/Icon.png" alt="">
+                <h2 class="text-2xl font-bold">Oops!! Sorry, There is no content here</h2>
+            </div>
+        `
+        return;
+    }
 
     videos.forEach(video => {
         console.log(video);
