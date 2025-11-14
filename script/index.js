@@ -60,6 +60,35 @@ function displayCategories(categories) {
 
 }
 
+const loadVideoDetails = (videoId) => {
+    console.log(videoId);
+    const url = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+
+    fetch (url)
+        .then(res => res.json())
+        .then(data => displayVideoDetails(data.video))
+
+}
+
+const displayVideoDetails = (video) => {
+    console.log(video);
+    document.getElementById("video_details").showModal();
+    const detailsContainer = document.getElementById("details-container");
+    detailsContainer.innerHTML = `
+        <div class="card bg-base-100 image-full shadow-sm">
+            <figure>
+                <img class= "w-full"
+                src="${video.thumbnail}"
+                alt="Shoes" />
+            </figure>
+            <div class="card-body">
+                <p class= "text-xl text-yellow-400">${video.description}</p>
+                </div>
+            </div>
+        </div>
+    `
+}
+
 const displayVideos = (videos) => {
     const videoContainer = document.getElementById("video-container");
 
@@ -76,7 +105,6 @@ const displayVideos = (videos) => {
     }
 
     videos.forEach(video => {
-        console.log(video);
         const videoCard = document.createElement("div");
         videoCard.innerHTML = `
             <div class="card bg-base-100">
@@ -98,6 +126,7 @@ const displayVideos = (videos) => {
                     <p class="text-sm text-gray-400">${video.others.views} Views</p>
                 </div>
             </div>
+            <button onclick= "loadVideoDetails('${video.video_id}') " class="btn btn-block">Show Details</button>
         </div>
         `
         // Append
