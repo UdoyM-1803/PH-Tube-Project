@@ -24,10 +24,19 @@
                 <img class="w-[120px]" src="Resources/Logo.png" alt="">
             </div>
             <div class="sort">
-                <button type="button" class="btn btn-accent text-black">Sort By View</button>
+                <label class="input">
+                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
+                            stroke="currentColor">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </g>
+                    </svg>
+                    <input id="search-input" type="search" required placeholder="Search" />
+                </label>
             </div>
             <div class="blogs">
-                <button type="button" class="btn bg-[#FF1F3D] text-white">Blogs</button>
+                <button type="button" class="btn bg-[#FF1F3D] text-white">Sort by View</button>
             </div>
         </nav>
     </header>
@@ -58,7 +67,7 @@
             <div class="modal-action">
                 <form method="dialog">
                     <!-- if there is a button in form, it will close the modal -->
-                    <button type="button" class="btn">Close</button>
+                    <button class="btn">Close</button>
                 </form>
             </div>
         </div>
